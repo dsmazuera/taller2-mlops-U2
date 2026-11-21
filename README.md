@@ -1,32 +1,37 @@
-# Predicción de Enfermedades - MLOps Unidad 2 - Taller 2
 
-## Descripción del problema
+# Proyecto 1 - Predicción de Enfermedades
 
-Este proyecto consiste en el desarrollo de una aplicación web que simula la predicción de enfermedades en pacientes a partir de tres variables: temperatura corporal, intensidad de los síntomas y número de días con síntomas. La aplicación permite clasificar el estado del paciente mediante reglas de decisión previamente definidas. Es una simulación académica.
+## Descripción
 
-## Propósito del proyecto
+Simulación de clasificación de enfermedades mediante una aplicación web.
 
-Implementar buenas prácticas de MLOps mediante el uso de GitHub para el control de versiones, la incorporación de nuevas funcionalidades y la automatización de pruebas y procesos de integración y entrega continua (CI/CD) con GitHub Actions.
+## Variables de entrada
 
-## Tecnologías utilizadas
+- Temperatura en grados Celsius.
+- Intensidad de los síntomas de 0 a 10.
+- Número de días con síntomas.
 
-- Python
-- Flask
-- Docker
-- Git y GitHub
-- GitHub Actions
+## Resultados posibles
 
-## Estructura del repositorio
+- NO ENFERMO
+- ENFERMEDAD LEVE
+- ENFERMEDAD AGUDA
+- ENFERMEDAD CRÓNICA
 
-El repositorio estará organizado con los siguientes componentes:
 
-- **app.py:** aplicación web y lógica de predicción.
-- **Dockerfile:** instrucciones para construir la imagen Docker.
-- **requirements.txt:** dependencias de Python.
-- **README.md:** documentación del proyecto.
-- **tests/:** pruebas automatizadas de la aplicación.
-- **.github/workflows/:** configuración de los procesos de CI/CD.
+## Construcción de la imagen Docker
 
-## Control de versiones
+Desde la carpeta del proyecto ejecutar:
 
-El desarrollo se realizará mediante ramas y pull requests, permitiendo conservar el historial de cambios y verificar las nuevas funcionalidades antes de incorporarlas a la rama principal.
+docker build -t mlops-enfermedades .
+
+## Ejecución del contenedor
+
+docker run --rm -p 5001:5001 mlops-enfermedades
+
+## Acceso a la aplicación
+
+Abrir en el navegador:
+
+http://localhost:5001
+
