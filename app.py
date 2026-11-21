@@ -1,16 +1,24 @@
 
+
 import json
 import os
 from collections import Counter
 from datetime import datetime, timezone
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
 
+# Archivo donde se guardan las predicciones
 ARCHIVO = os.environ.get(
-    "PREDICCIONES_FILE", "/app/data/predicciones.jsonl"
+    "PREDICCIONES_FILE",
+    os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        "data",
+        "predicciones.jsonl"
+    )
 )
 
+# Categorías de enfermedades
 CATEGORIAS = [
     "NO ENFERMO",
     "ENFERMEDAD LEVE",
@@ -20,22 +28,28 @@ CATEGORIAS = [
 ]
 
 
-# Función original con la quinta categoría
+# Función de predicción
 def predecir_enfermedad(temperatura, intensidad, dias):
+
     if temperatura >= 40 and intensidad >= 9 and dias >= 15:
         return "ENFERMEDAD TERMINAL"
+
     elif dias >= 30:
         return "ENFERMEDAD CRÓNICA"
+
     elif temperatura >= 39 or intensidad >= 8:
         return "ENFERMEDAD AGUDA"
+
     elif temperatura >= 37.5 or intensidad >= 3:
         return "ENFERMEDAD LEVE"
+
     else:
         return "NO ENFERMO"
 
 
 # Guardar cada predicción
 def guardar_prediccion(categoria):
+
     fecha = datetime.now(timezone.utc).isoformat()
 
     registro = {
@@ -44,6 +58,7 @@ def guardar_prediccion(categoria):
     }
 
     carpeta = os.path.dirname(ARCHIVO)
+
     if carpeta:
         os.makedirs(carpeta, exist_ok=True)
 
@@ -55,6 +70,7 @@ def guardar_prediccion(categoria):
 
 # Leer las predicciones guardadas
 def leer_predicciones():
+
     if not os.path.exists(ARCHIVO):
         return []
 
@@ -70,6 +86,7 @@ def leer_predicciones():
 
 # Calcular estadísticas
 def calcular_estadisticas():
+
     registros = leer_predicciones()
 
     conteo = Counter(
@@ -83,22 +100,27 @@ def calcular_estadisticas():
 
     return {
         "total_predicciones": len(registros),
+
         "predicciones_por_categoria": por_categoria,
+
         "ultimas_5_predicciones": list(
             reversed(registros[-5:])
         ),
+
         "fecha_ultima_prediccion": (
             registros[-1]["fecha"] if registros else None
         )
     }
 
 
-# Página principal
+# Página principal: simulador de enfermedades
 @app.route("/", methods=["GET", "POST"])
 def inicio():
+
     resultado = ""
 
     if request.method == "POST":
+
         try:
             temperatura = float(request.form["temperatura"])
             intensidad = int(request.form["intensidad"])
@@ -109,61 +131,50 @@ def inicio():
                 and 0 <= intensidad <= 10
                 and dias >= 0
             ):
+
                 resultado = predecir_enfermedad(
-                    temperatura, intensidad, dias
+                    temperatura,
+                    intensidad,
+                    dias
                 )
+
                 guardar_prediccion(resultado)
+
             else:
                 resultado = "Error: revisa los valores ingresados."
 
         except (ValueError, KeyError):
             resultado = "Error: introduce valores válidos."
 
-    return """
-    <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Predicción de Enfermedades</title>
-    </head>
-    <body>
-        <h2>Simulador de Predicción de Enfermedades</h2>
-
-        <form method="POST">
-            <p>Temperatura (°C):</p>
-            <input type="number" name="temperatura"
-                   step="0.1" required>
-
-            <p>Intensidad de síntomas (0-10):</p>
-            <input type="number" name="intensidad"
-                   min="0" max="10" required>
-
-            <p>Días con síntomas:</p>
-            <input type="number" name="dias"
-                   min="0" required>
-
-            <p><button type="submit">Predecir</button></p>
-        </form>
-
-        <h3>Resultado: RESULTADO_AQUI</h3>
-
-        <p><a href="/estadisticas">
-            Consultar estadísticas
-        </a></p>
-
-        <p>Simulación académica.
-        No es un diagnóstico médico.</p>
-    </body>
-    </html>
-    """.replace("RESULTADO_AQUI", resultado)
+    # Mostrar la página con el diseño moderno
+    return render_template(
+        "pagina_prediccion.html",
+        resultado=resultado
+    )
 
 
-# Nueva ruta para consultar estadísticas
+# Página visual de estadísticas
 @app.route("/estadisticas", methods=["GET"])
 def estadisticas():
+
+    datos = calcular_estadisticas()
+
+    return render_template(
+        "estadisticas.html",
+        datos=datos
+    )
+
+
+# API para consultar estadísticas en JSON
+@app.route("/api/estadisticas", methods=["GET"])
+def api_estadisticas():
+
     return jsonify(calcular_estadisticas())
 
 
+# Ejecutar aplicación
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001)
-
-
+    app.run(
+        host="0.0.0.0",
+        port=5001
+    )
