@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predicción de Enfermedades</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 40px 20px;
+            background: #f1f5fb;
+            font-family: Arial, sans-serif;
+            color: #26364e;
+        }
+
+        .contenedor {
+            max-width: 760px;
+            margin: auto;
+        }
+
+        h1 {
+            font-size: 34px;
+            margin-bottom: 12px;
+        }
+
+        .subtitulo {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .tarjeta {
+            background: white;
+            border-radius: 18px;
+            padding: 32px;
+            margin-bottom: 22px;
+            box-shadow: 0 4px 18px rgba(30, 50, 80, 0.06);
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 22px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin: 22px 0 9px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #d6deea;
+            border-radius: 9px;
+            font-size: 16px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px #dbeafe;
+        }
+
+        button, .boton {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 9px;
+            padding: 14px 22px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 28px;
+        }
+
+        button:hover, .boton:hover {
+            background: #1d4ed8;
+        }
+
+        .resultado {
+            background: #eff6ff;
+            border-left: 5px solid #2563eb;
+            padding: 22px;
+            border-radius: 10px;
+            margin-top: 24px;
+        }
+
+        .resultado strong {
+            display: block;
+            font-size: 22px;
+            margin-top: 8px;
+            color: #1d4ed8;
+        }
+
+        .enlace {
+            text-align: center;
+        }
+
+        .nota {
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-top: 25px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 24px 14px;
+            }
+
+            h1 {
+                font-size: 27px;
+            }
+
+            .tarjeta {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="contenedor">
+
+        <h1>Simulador de Predicción de Enfermedades</h1>
+
+        <p class="subtitulo">
+            Ingresa los datos para obtener una clasificación
+            simulada de acuerdo con las condiciones del modelo.
+        </p>
+
+        <section class="tarjeta">
+            <h2>Datos de la simulación</h2>
+
+            <form method="POST" action="/">
+
+                <label for="temperatura">
+                    Temperatura corporal (°C)
+                </label>
+                <input
+                    type="number"
+                    id="temperatura"
+                    name="temperatura"
+                    min="30"
+                    max="45"
+                    step="0.1"
+                    placeholder="Ejemplo: 38.5"
+                    required
+                >
+
+                <label for="intensidad">
+                    Intensidad de síntomas (0-10)
+                </label>
+                <input
+                    type="number"
+                    id="intensidad"
+                    name="intensidad"
+                    min="0"
+                    max="10"
+                    step="1"
+                    placeholder="Ejemplo: 5"
+                    required
+                >
+
+                <label for="dias">
+                    Días con síntomas
+                </label>
+                <input
+                    type="number"
+                    id="dias"
+                    name="dias"
+                    min="0"
+                    step="1"
+                    placeholder="Ejemplo: 3"
+                    required
+                >
+
+                <button type="submit">
+                    Obtener predicción
+                </button>
+            </form>
+
+            {% if resultado %}
+            <div class="resultado">
+                Resultado de la simulación
+                <strong>{{ resultado }}</strong>
+            </div>
+            {% endif %}
+        </section>
+
+        <section class="tarjeta enlace">
+            <h2>Panel de estadísticas</h2>
+
+            <p class="subtitulo">
+                Consulta las predicciones registradas,
+                los resultados por categoría y las
+                fechas de las últimas predicciones.
+            </p>
+
+            <a class="boton" href="/estadisticas">
+                Consultar estadísticas
+            </a>
+        </section>
+
+        <p class="nota">
+            Esta aplicación es una simulación académica.
+            No constituye un diagnóstico médico.
+        </p>
+
+    </main>
+</body>
+</html>
