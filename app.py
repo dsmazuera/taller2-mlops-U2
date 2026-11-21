@@ -4,6 +4,8 @@ from flask import Flask, request
 app = Flask(__name__)
 
 def predecir_enfermedad(temperatura, intensidad, dias):
+    if temperatura >= 40 and intensidad >= 9 and dias >= 15:
+        return "ENFERMEDAD TERMINAL"
     if dias >= 30:
         return "ENFERMEDAD CRÓNICA"
     elif temperatura >= 39 or intensidad >= 8:
