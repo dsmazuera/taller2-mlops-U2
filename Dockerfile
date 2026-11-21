@@ -8,6 +8,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app.py .
 
+RUN mkdir -p /app/data
+
 EXPOSE 5001
 
 CMD ["python", "app.py"]
