@@ -80,11 +80,12 @@ Las estadísticas se presentan mediante un panel visual desarrollado con HTML y 
 | `/estadisticas` | Panel visual de estadísticas |
 | `/api/estadisticas` | Estadísticas en formato JSON |
 
+
 ## 7. Ejecución local con Python
 
 ### Instalar dependencias
 
-Desde la carpeta principal del proyecto:
+Desde la carpeta principal del proyecto, ejecutar:
 
 ```bash
 python -m pip install -r requirements.txt
@@ -92,21 +93,33 @@ python -m pip install -r requirements.txt
 
 ### Iniciar la aplicación
 
+Ejecutar el siguiente comando:
+
 ```bash
 python app.py
 ```
 
-### Abrir el navegador
+### Acceder a la aplicación
 
-Acceder a:
+Una vez iniciado Flask, la aplicación estará disponible en el puerto `5001` del entorno donde se está ejecutando.
 
-http://localhost:5001
+**Ejecución local:** abrir el navegador del mismo equipo y acceder a `localhost:5001`.
+
+**Ejecución en GitHub Codespaces:**
+
+1. Abrir el repositorio en GitHub Codespaces.
+2. Ejecutar `python app.py` desde la terminal.
+3. Seleccionar la pestaña **Ports (Puertos)**.
+4. Localizar el puerto `5001`.
+5. Seleccionar **Open in Browser** para abrir el simulador.
+
+**Nota:** La aplicación no dispone de un despliegue web público permanente. Para utilizarla es necesario iniciar el servidor en un entorno local o en GitHub Codespaces.
 
 ## 8. Ejecución con Docker
 
 ### Construir la imagen
 
-Desde la carpeta principal del proyecto:
+Desde la carpeta principal del proyecto, ejecutar:
 
 ```bash
 docker build -t mlops-enfermedades .
@@ -120,13 +133,15 @@ docker run --rm -p 5001:5001 mlops-enfermedades
 
 ### Acceder a la aplicación
 
-Abrir:
+Una vez iniciado el contenedor, la aplicación estará disponible en el puerto `5001`.
 
-http://localhost:5001
+- **Docker en un equipo local:** acceder desde el navegador del mismo equipo a `localhost:5001`.
+- **Docker en GitHub Codespaces:** abrir la pestaña **Ports (Puertos)** y seleccionar **Open in Browser** para el puerto `5001`.
 
-Para detener el contenedor, presionar `Ctrl + C`.
+Para detener el contenedor, presionar `Ctrl + C` en la terminal donde se está ejecutando.
 
 **Nota:** Los registros generados dentro del contenedor no se conservan después de eliminarlo, a menos que se configure almacenamiento persistente.
+
 
 ## 9. Pruebas automatizadas
 
